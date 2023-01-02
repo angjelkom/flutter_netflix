@@ -1,14 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_netflix/widgets/genre.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-import '../bloc/netflix_bloc.dart';
 import '../model/movie.dart';
-import '../model/tmdb_image.dart';
-import '../repository/repository.dart';
+import 'logo_image.dart';
 import 'poster_image.dart';
 
 class NewAndHotTile extends StatelessWidget {
@@ -21,7 +18,8 @@ class NewAndHotTile extends StatelessWidget {
     var date = movie.releaseDate ?? DateTime.now();
     return InkWell(
       onTap: () {
-        context.go('${GoRouter.of(context).location}/details', extra: movie);
+        context.go('${GoRouterState.of(context).location}/details',
+            extra: movie);
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,25 +54,9 @@ class NewAndHotTile extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    FutureBuilder(
-                        future: context
-                            .watch<TMDBRepository>()
-                            .getImages(movie.id, movie.type),
-                        builder: (context, AsyncSnapshot<TMDBImages> snapshot) {
-                          if (snapshot.hasError ||
-                              !snapshot.hasData ||
-                              snapshot.data!.logos.isEmpty) {
-                            return Container();
-                          }
-                          final configuration =
-                              context.watch<ConfigurationBloc>().state;
-                          final url =
-                              '${configuration.data?.images.baseUrl}/${configuration.data?.images.logoSizes[2]}${snapshot.data?.logos[0].filePath}';
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: CachedNetworkImage(imageUrl: url),
-                          );
-                        }),
+                    LogoImage(
+                      movie: movie,
+                    ),
                     const Spacer(),
                     IconButton(
                       padding: const EdgeInsets.all(24),
@@ -111,9 +93,13 @@ class NewAndHotTile extends StatelessWidget {
                     const SizedBox(
                       height: 12.0,
                     ),
-                    const Text(
-                      'Pshychological • Dark • Drama • Keeping Secrets • Movie',
-                    ),
+                    const Genre(genres: [
+                      'Pshychological',
+                      'Dark',
+                      'Drama',
+                      'Keeping Secrets',
+                      'Movie'
+                    ]),
                     const SizedBox(
                       height: 16.0,
                     ),

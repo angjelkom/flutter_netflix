@@ -9,9 +9,7 @@ class NetflixScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            body: child,
-            bottomNavigationBar: const NextflixBottomNavigation()));
+    return Scaffold(
+        body: child, bottomNavigationBar: const NextflixBottomNavigation());
   }
 }

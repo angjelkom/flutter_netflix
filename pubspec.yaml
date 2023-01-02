@@ -40,15 +40,16 @@ dependencies:
   shimmer: ^2.0.0
   ionicons: ^0.2.1
   go_router:
-    
-    git:
-      url: https://github.com/angjelkom/packages.git
-      ref: shell-route-observers
-      path: packages/go_router/
+    path: /Users/angjelkom/Documents/GitHub/packages/packages/go_router
+    # git:
+    #   url: https://github.com/flutter/packages.git
+    #   ref: main
+    #   path: packages/go_router/
   http: ^0.13.5
   cached_network_image: ^3.2.2
   lucide_icons: ^0.92.0
   intl: ^0.17.0
+  sliver_tools: ^0.2.8
 
 dev_dependencies:
   flutter_test:

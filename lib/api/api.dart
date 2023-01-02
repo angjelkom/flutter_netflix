@@ -6,7 +6,7 @@ class TMDB {
   final endpoint = 'https://api.themoviedb.org/3';
 
   // Get a free key at: https://www.themoviedb.org/documentation/api
-  final apiKey = 'INSERT_YOUR_API_KEY_HERE';
+  final apiKey = 'b8735916ebe69a988e7a757928558cf0';
 
   Future<List<Map<String, dynamic>>> getTrending(
       {type = 'all', time = 'week'}) async {

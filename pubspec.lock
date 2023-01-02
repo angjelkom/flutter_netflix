@@ -145,12 +145,10 @@ packages:
   go_router:
     dependency: "direct main"
     description:
-      path: "packages/go_router"
-      ref: shell-route-observers
-      resolved-ref: "401134155f4d261df14f5f7ad53fdd08c9f9ca8b"
-      url: "https://github.com/angjelkom/packages.git"
-    source: git
-    version: "5.1.0"
+      path: "/Users/angjelkom/Documents/GitHub/packages/packages/go_router"
+      relative: false
+    source: path
+    version: "5.2.5"
   http:
     dependency: "direct main"
     description:
@@ -352,6 +350,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sliver_tools:
+    dependency: "direct main"
+    description:
+      name: sliver_tools
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.8"
   source_span:
     dependency: transitive
     description:

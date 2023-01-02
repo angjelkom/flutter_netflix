@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_netflix/bloc/netflix_bloc.dart';
 import 'package:flutter_netflix/cubit/animation_status_cubit.dart';
+import 'package:flutter_netflix/widgets/highlight_movie.dart';
 import 'package:flutter_netflix/widgets/movie_box.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../widgets/netflix_app_bar.dart';
 
@@ -43,12 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
     context
         .read<TrendingMovieListDailyBloc>()
         .add(FetchTrendingMovieListDaily());
+
+    context.read<DiscoverMoviesBloc>().add(DiscoverMoviesEvent());
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    if (GoRouter.of(context).location != '/home/tvshows') {
+    if (GoRouterState.of(context).location != '/home/tvshows') {
       context.read<AnimationStatusCubit>().onStatus(null);
     }
     super.didChangeDependencies();
@@ -91,132 +95,144 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     const padding = EdgeInsets.only(top: 16.0, bottom: 4.0);
-    return CustomScrollView(
-      slivers: [
-        SliverPersistentHeader(
-            delegate:
-                NetflixHeader(scrollOffset: _scrollOffset, name: widget.name)),
-        SliverPersistentHeader(
-          delegate: NetflixBottomHeader(scrollOffset: _scrollOffset),
-          pinned: true,
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            const Padding(
-              padding: padding,
-              child: Text(
-                'Trending TV Shows This Week',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+    return NestedScrollView(
+      physics: const ClampingScrollPhysics(),
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: MultiSliver(children: [
+                SliverPersistentHeader(
+                  delegate: NetflixHeader(
+                      scrollOffset: _scrollOffset, name: widget.name),
+                  pinned: true,
+                ),
+              ])),
+        ];
+      },
+      body: CustomScrollView(
+        physics: const ClampingScrollPhysics(),
+        controller: _scrollController,
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate.fixed([
+              const HighlightMovie(),
+              const Padding(
+                padding: padding,
+                child: Text(
+                  'Trending TV Shows This Week',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 180.0,
-              child: Builder(builder: (context) {
-                final movies =
-                    context.watch<TrendingTvShowListWeeklyBloc>().state;
+              SizedBox(
+                height: 180.0,
+                child: Builder(builder: (context) {
+                  final movies =
+                      context.watch<TrendingTvShowListWeeklyBloc>().state;
 
-                if (movies is TrendingTvShowLisWeekly) {
-                  return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: movies.list.length,
-                      itemBuilder: (context, index) {
-                        final movie = movies.list[index];
-                        return MovieBox(
-                          key: ValueKey(movie.id),
-                          movie: movie,
-                        );
-                      });
-                }
-                return _shimmer;
-              }),
-            ),
-            const Padding(
-              padding: padding,
-              child: Text(
-                'Trending TV Shows Today',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  if (movies is TrendingTvShowLisWeekly) {
+                    return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: movies.list.length,
+                        itemBuilder: (context, index) {
+                          final movie = movies.list[index];
+                          return MovieBox(
+                            key: ValueKey(movie.id),
+                            movie: movie,
+                          );
+                        });
+                  }
+                  return _shimmer;
+                }),
               ),
-            ),
-            SizedBox(
-              height: 180.0,
-              child: Builder(builder: (context) {
-                final movies =
-                    context.watch<TrendingTvShowListDailyBloc>().state;
-
-                if (movies is TrendingTvShowListDaily) {
-                  return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: movies.list.length,
-                      itemBuilder: (context, index) {
-                        final movie = movies.list[index];
-                        return MovieBox(
-                          key: ValueKey(movie.id),
-                          movie: movie,
-                        );
-                      });
-                }
-                return _shimmer;
-              }),
-            ),
-            const Padding(
-              padding: padding,
-              child: Text(
-                'Trending Movies This Week',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              const Padding(
+                padding: padding,
+                child: Text(
+                  'Trending TV Shows Today',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 180.0,
-              child: Builder(builder: (context) {
-                final movies =
-                    context.watch<TrendingMovieListWeeklyBloc>().state;
+              SizedBox(
+                height: 180.0,
+                child: Builder(builder: (context) {
+                  final movies =
+                      context.watch<TrendingTvShowListDailyBloc>().state;
 
-                if (movies is TrendingMovieListWeekly) {
-                  return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: movies.list.length,
-                      itemBuilder: (context, index) {
-                        final movie = movies.list[index];
-                        return MovieBox(
-                          key: ValueKey(movie.id),
-                          movie: movie,
-                        );
-                      });
-                }
-                return _shimmer;
-              }),
-            ),
-            const Padding(
-              padding: padding,
-              child: Text(
-                'Trending Movies Today',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  if (movies is TrendingTvShowListDaily) {
+                    return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: movies.list.length,
+                        itemBuilder: (context, index) {
+                          final movie = movies.list[index];
+                          return MovieBox(
+                            key: ValueKey(movie.id),
+                            movie: movie,
+                          );
+                        });
+                  }
+                  return _shimmer;
+                }),
               ),
-            ),
-            SizedBox(
-              height: 180.0,
-              child: Builder(builder: (context) {
-                final movies =
-                    context.watch<TrendingMovieListDailyBloc>().state;
+              const Padding(
+                padding: padding,
+                child: Text(
+                  'Trending Movies This Week',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 180.0,
+                child: Builder(builder: (context) {
+                  final movies =
+                      context.watch<TrendingMovieListWeeklyBloc>().state;
 
-                if (movies is TrendingMovieListDaily) {
-                  return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: movies.list.length,
-                      itemBuilder: (context, index) {
-                        final movie = movies.list[index];
-                        return MovieBox(
-                          key: ValueKey(movie.id),
-                          movie: movie,
-                        );
-                      });
-                }
-                return _shimmer;
-              }),
-            ),
-          ]),
-        ),
-      ],
+                  if (movies is TrendingMovieListWeekly) {
+                    return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: movies.list.length,
+                        itemBuilder: (context, index) {
+                          final movie = movies.list[index];
+                          return MovieBox(
+                            key: ValueKey(movie.id),
+                            movie: movie,
+                          );
+                        });
+                  }
+                  return _shimmer;
+                }),
+              ),
+              const Padding(
+                padding: padding,
+                child: Text(
+                  'Trending Movies Today',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 180.0,
+                child: Builder(builder: (context) {
+                  final movies =
+                      context.watch<TrendingMovieListDailyBloc>().state;
+
+                  if (movies is TrendingMovieListDaily) {
+                    return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: movies.list.length,
+                        itemBuilder: (context, index) {
+                          final movie = movies.list[index];
+                          return MovieBox(
+                            key: ValueKey(movie.id),
+                            movie: movie,
+                          );
+                        });
+                  }
+                  return _shimmer;
+                }),
+              ),
+            ]),
+          ),
+        ],
+      ),
     );
   }
 }
