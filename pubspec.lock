@@ -14,7 +14,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.1.0"
+    version: "8.1.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -28,7 +28,7 @@ packages:
       name: cached_network_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.2"
+    version: "3.2.3"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
@@ -110,7 +110,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.1.1"
+    version: "8.1.2"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -145,10 +145,10 @@ packages:
   go_router:
     dependency: "direct main"
     description:
-      path: "/Users/angjelkom/Documents/GitHub/packages/packages/go_router"
-      relative: false
-    source: path
-    version: "5.2.5"
+      name: go_router
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.9"
   http:
     dependency: "direct main"
     description:
@@ -169,14 +169,14 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.0"
   ionicons:
     dependency: "direct main"
     description:
       name: ionicons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.1"
+    version: "0.2.2"
   js:
     dependency: transitive
     description:
@@ -197,14 +197,14 @@ packages:
       name: logging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   lucide_icons:
     dependency: "direct main"
     description:
       name: lucide_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.92.0"
+    version: "0.115.0"
   matcher:
     dependency: transitive
     description:
@@ -356,7 +356,7 @@ packages:
       name: sliver_tools
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.8"
+    version: "0.2.9"
   source_span:
     dependency: transitive
     description:
