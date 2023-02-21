@@ -27,8 +27,8 @@ class NetflixHeader extends SliverPersistentHeaderDelegate {
     final location = GoRouterState.of(context).location;
     final isTvShowsPage = location.contains('tvshows');
     final opacity = isTvShowsPage
-        ? (status == AnimationStatus.completed ? 1.0 : 0.0)
-        : (status == AnimationStatus.forward ? 0.0 : 1.0);
+        ? (status.state == AnimationStatus.completed ? 1.0 : 0.0)
+        : (status.state == AnimationStatus.forward ? 0.0 : 1.0);
 
     final backdrop =
         Colors.black.withOpacity((scrollOffset / 100).clamp(0, .8).toDouble());
